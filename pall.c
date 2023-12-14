@@ -1,4 +1,4 @@
-#include "header.h"
+#include "monty.h"
 
 void pall() //displays elements in stack from top to bottom
 {
