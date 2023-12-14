@@ -1,30 +1,30 @@
 #include "monty.h"
 
 /**
- * open_file - opens a file
+ * openFile - opens a file
  * @file_name: the file namepath
  * Return: void
  */
 
-void open_file(char *file_name)
+void openFile(char *file_name)
 {
 	FILE *fd = fopen(file_name, "r");
 
 	if (file_name == NULL || fd == NULL)
-		err(2, file_name);
+		errorMessage(2, file_name);
 
-	read_file(fd);
+	readFile(fd);
 	fclose(fd);
 }
 
 
 /**
- * read_file - reads a file
+ * readFile - reads a file
  * @fd: pointer to file descriptor
  * Return: void
  */
 
-void read_file(FILE *fd)
+void readFile(FILE *fd)
 {
 	int line_number, format = 0;
 	char *buffer = NULL;
@@ -54,7 +54,7 @@ int parse_line(char *buffer, int line_number, int format)
 	const char *delim = "\n ";
 
 	if (buffer == NULL)
-		err(4);
+		errorMessage(4);
 
 	opcode = strtok(buffer, delim);
 	if (opcode == NULL)
@@ -85,7 +85,7 @@ void find_func(char *opcode, char *value, int ln, int format)
 	int flag;
 
 	instruction_t func_list[] = {
-		{"push", add_to_stack},
+		{"push", add_stack},
 		{"pall", print_stack},
 		{"pint", print_top},
 		{"pop", pop_top},
@@ -115,7 +115,7 @@ void find_func(char *opcode, char *value, int ln, int format)
 		}
 	}
 	if (flag == 1)
-		err(3, ln, opcode);
+		errorMessage(3, ln, opcode);
 }
 
 
@@ -143,17 +143,17 @@ void call_fun(op_func func, char *op, char *val, int ln, int format)
 			flag = -1;
 		}
 		if (val == NULL)
-			err(5, ln);
+			errorMessage(5, ln);
 		for (i = 0; val[i] != '\0'; i++)
 		{
 			if (isdigit(val[i]) == 0)
-				err(5, ln);
+				errorMessage(5, ln);
 		}
-		node = create_node(atoi(val) * flag);
+		node = makeNode(atoi(val) * flag);
 		if (format == 0)
 			func(&node, ln);
 		if (format == 1)
-			add_to_queue(&node, ln);
+			add_queue(&node, ln);
 	}
 	else
 		func(&head, ln);
